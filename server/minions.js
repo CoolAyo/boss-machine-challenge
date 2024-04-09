@@ -12,7 +12,15 @@ const {
     deleteFromDatabasebyId,
   } = require('./db');
 
-
+  minionsRouter.param('minionId', (req, res, next, id) => {
+    const minion = getFromDatabaseById('minions', id);
+    if (minion) {
+      req.minion = minion;
+      next();
+    } else {
+      res.status(404).send();
+    }
+  });
 
 minionsRouter.get('/', (req,res,next) => {
     const dataToSend = getAllFromDatabase('minions');
@@ -20,7 +28,7 @@ minionsRouter.get('/', (req,res,next) => {
         res.status(500).send('Server is having issues')
     }
     else{
-        res.status(201).send(dataToSend);
+        res.status(200).send(dataToSend);
     }
 });
 
@@ -35,21 +43,22 @@ minionsRouter.post('/', (req,res,next) => {
 });
 
 minionsRouter.get('/:minionId', (req,res,next) => {
-    if (!selectedMinion){
-        res.status(500).send('New data has failed to send');
+    if (req.minion){
+        res.status(200).send(req.minion);
     }
     else{
-        res.status(201).send(req.minion);
+      res.status(404).send('New data has failed to send');
     }
 });
 
 minionsRouter.put('/:minionId', (req,res,next) => {
     const minionUpdated = updateInstanceInDatabase('minions', req.body);
-    if (!minionUpdated){
-        res.status(500).send('New data has failed to send');
+    if (minionUpdated){
+      res.send(minionUpdated);
     }
     else{
-        res.send(minionUpdated);
+      res.status(500).send('New data has failed to send');
+        return minionUpdated;
     }
 });
 
