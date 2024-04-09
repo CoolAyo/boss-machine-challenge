@@ -36,7 +36,7 @@ minionsRouter.post('/', (req,res,next) => {
 
 minionsRouter.get('/:minionId', (req,res,next) => {
     if (!selectedMinion){
-        res.status(500).send('New data has failed to send')
+        res.status(500).send('New data has failed to send');
     }
     else{
         res.status(201).send(req.minion);
@@ -46,7 +46,7 @@ minionsRouter.get('/:minionId', (req,res,next) => {
 minionsRouter.put('/:minionId', (req,res,next) => {
     const minionUpdated = updateInstanceInDatabase('minions', req.body);
     if (!minionUpdated){
-        res.status(500).send('New data has failed to send')
+        res.status(500).send('New data has failed to send');
     }
     else{
         res.send(minionUpdated);
@@ -69,8 +69,6 @@ minionsRouter.get('/:minionId/work', (req, res, next) => {
     });
     res.send(work);
 });
-
-
   
   minionsRouter.post('/:minionId/work', (req, res, next) => {
     const workToAdd = req.body;
